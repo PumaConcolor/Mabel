@@ -2,9 +2,11 @@ from abc import ABC, abstractmethod
 
 
 class DataConnector(ABC):
+    def __init__(self, path):
+        self._path = path
 
     @abstractmethod
-    def getFilesList(self, path):
+    def getFilesList(self):
         pass
 
     @abstractmethod
