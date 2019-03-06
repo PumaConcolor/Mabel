@@ -1,3 +1,4 @@
+import os
 from abc import ABC, abstractmethod
 
 
@@ -12,3 +13,18 @@ class DataConnector(ABC):
     @abstractmethod
     def getFile(self, path):
         pass
+
+
+class FolderConnector(DataConnector):
+
+    def __init__(self, path):
+        super().__init__(path)
+
+    def getFilesList(self):
+        return [os.path.join(dir, file) for dir, _, file in os.walk(self._path)]
+
+    def getFile(self, path):
+        path = os.path.join(self._path, path)
+        with open(path, 'rb') as binaryFile:
+            file = binaryFile.read()
+        return file
