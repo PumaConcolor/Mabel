@@ -43,6 +43,7 @@ class File(Base):
     __tablename__ = 'files'
 
     id = Column(String(36), primary_key=True)
+    name = Column(Text, nullable=False)
     path = Column(Text, nullable=False)
 
     tags = relationship('Tag', secondary=files_tags)
