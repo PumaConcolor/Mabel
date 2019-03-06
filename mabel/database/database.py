@@ -57,6 +57,7 @@ class Tag(Base):
 
     id = Column(String(36), primary_key=True)
     description = Column(String(64), unique=True, nullable=False)
+    category = Column(String(64), nullable=False)
 
     files = relationship('File', secondary=files_tags)
 
