@@ -1,5 +1,6 @@
 import os
 import zipfile
+import tarfile
 from abc import ABC, abstractmethod
 
 
@@ -46,3 +47,42 @@ class ZipConnector(DataConnector):
             file = archive.open(path)
             file = file.read()
         return file
+
+
+class TarConnector(DataConnector):
+
+    def __init__(self, path, mode='r'):
+        super().__init__(path)
+        self._mode = mode
+
+    def getFilesList(self):
+        files = []
+        with tarfile.open(self._path, self._mode) as archive:
+            for file in archive.getmembers():
+                if file.isfile():
+                    files.append(file.path)
+        return files
+
+    def getFile(self, path):
+        with tarfile.open(self._path, self._mode) as archive:
+            file = archive.extractfile(path)
+            file = file.read()
+        return file
+
+
+class TarGzConnector(TarConnector):
+
+    def __init__(self, path):
+        super().__init__(path, 'r:gz')
+
+
+class TarBz2Connector(TarConnector):
+
+    def __init__(self, path):
+        super().__init__(path, 'r:bz2')
+
+
+class TarXzConnector(TarConnector):
+
+    def __init__(self, path):
+        super().__init__(path, 'r:xz')
